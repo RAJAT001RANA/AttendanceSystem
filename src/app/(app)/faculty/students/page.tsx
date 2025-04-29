@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader2, User, Mail } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import type { User as Student } from '@/types'; // Rename User to Student for clarity here
-import { mockUsers } from '@/lib/auth'; // Using mock data for now
+import { getMockUsers } from '@/lib/auth'; // Import function to get mock users
 
 export default function ViewStudentsPage() {
   const { user } = useAuth(); // Faculty user
@@ -16,13 +16,19 @@ export default function ViewStudentsPage() {
 
   useEffect(() => {
     async function fetchStudents() {
-      // In a real app, fetch this from your database
       setIsLoading(true);
-       await new Promise(resolve => setTimeout(resolve, 500)); // Simulate loading
-      // Filter mock users to get only students
-      const studentList = mockUsers.filter(u => u.role === 'student');
-      setStudents(studentList);
-      setIsLoading(false);
+       try {
+         // Fetch mock users using the function
+         const allUsers = await getMockUsers();
+         // Filter mock users to get only students
+         const studentList = allUsers.filter(u => u.role === 'student');
+         setStudents(studentList);
+       } catch (error) {
+          console.error("Failed to fetch students:", error);
+          // Optionally, show an error message to the user
+       } finally {
+            setIsLoading(false);
+       }
     }
 
     if (user && user.role === 'faculty') {
@@ -100,12 +106,3 @@ export default function ViewStudentsPage() {
     </div>
   );
 }
-
-// Import mock users directly for demo purposes
-// In a real app, this would be fetched via an API call
-const mockUsers: Student[] = [
-  { id: 'student1', name: 'Alice Smith', email: 'alice@example.com', role: 'student' },
-  { id: 'student2', name: 'Bob Johnson', email: 'bob@example.com', role: 'student' },
-  { id: 'student3', name: 'Charlie Brown', email: 'charlie@example.com', role: 'student' },
-   { id: 'faculty1', name: 'Dr. Carol White', email: 'carol@example.com', role: 'faculty' }, // Include faculty for filtering test
-];

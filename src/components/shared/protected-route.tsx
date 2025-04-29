@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import type { UserRole } from '@/types';
 import { Loader2 } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast"; // Import useToast hook
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,6 +15,7 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const { toast } = useToast(); // Get toast function from the hook
 
   useEffect(() => {
     if (!loading) {
@@ -34,7 +36,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
         }
       }
     }
-  }, [user, loading, router, allowedRoles]);
+  }, [user, loading, router, allowedRoles, toast]); // Add toast to dependency array
 
   if (loading || !user || (allowedRoles && user && !allowedRoles.includes(user.role))) {
     // Show loading indicator while checking auth or if user is null/unauthorized before redirect
@@ -49,6 +51,4 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   return <>{children}</>;
 }
 
-// Helper function for toast (consider moving to a utils file)
-import { toast as uiToast } from "@/hooks/use-toast";
-const toast = uiToast;
+// Removed the standalone toast import from here

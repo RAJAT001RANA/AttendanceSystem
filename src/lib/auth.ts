@@ -5,11 +5,13 @@ import type { User, UserRole } from '@/types';
 const mockUsers: User[] = [
   { id: 'student1', name: 'Alice Smith', email: 'alice@example.com', role: 'student' },
   { id: 'student2', name: 'Bob Johnson', email: 'bob@example.com', role: 'student' },
+   { id: 'student3', name: 'Charlie Brown', email: 'charlie@example.com', role: 'student' },
   { id: 'faculty1', name: 'Dr. Carol White', email: 'carol@example.com', role: 'faculty' },
 ];
 const mockPasswords: Record<string, string> = {
   'alice@example.com': 'password123',
   'bob@example.com': 'password123',
+  'charlie@example.com': 'password123',
   'carol@example.com': 'password123',
 };
 
@@ -89,4 +91,10 @@ export function logout() {
 export async function getUserById(userId: string): Promise<User | undefined> {
   await new Promise(resolve => setTimeout(resolve, 100)); // Simulate delay
   return mockUsers.find(u => u.id === userId);
+}
+
+// Function to get the list of mock users (used by faculty/students page)
+export async function getMockUsers(): Promise<User[]> {
+    await new Promise(resolve => setTimeout(resolve, 100)); // Simulate delay
+    return [...mockUsers]; // Return a copy to prevent direct modification
 }
