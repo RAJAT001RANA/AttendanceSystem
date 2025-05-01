@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -80,7 +81,7 @@ export default function ViewStudentsPage() {
                         <TableRow key={student.id}>
                              <TableCell>
                                 <Avatar className="h-9 w-9">
-                                    <AvatarImage src={`https://picsum.photos/seed/${student.id}/40/40`} alt={student.name} />
+                                    <AvatarImage data-ai-hint="person avatar" src={`https://picsum.photos/seed/${student.id}/40/40`} alt={student.name} />
                                     <AvatarFallback>{getInitials(student.name)}</AvatarFallback>
                                 </Avatar>
                             </TableCell>
@@ -106,3 +107,4 @@ export default function ViewStudentsPage() {
     </div>
   );
 }
+
